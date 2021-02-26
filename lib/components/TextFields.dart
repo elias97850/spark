@@ -5,28 +5,32 @@ class AccountTextField extends StatefulWidget {
   //
   AccountTextField({
     @required this.hintText,
-    @required this.textInputType,
     @required this.title,
-    @required this.icon,
     @required this.onChanged,
     @required this.currentFocus,
     @required this.context,
     this.nextFocus,
+    this.textInputType,
+    this.icon,
     this.textInputAction,
-    this.onPressed,
+    this.onPressedPasswordIcon,
+    this.onTapBirth,
     this.obscureText,
+    this.isBirth,
   });
   //
   final String hintText;
   final TextInputType textInputType;
   final String title;
   final IconData icon;
-  final Function onPressed;
+  final Function onPressedPasswordIcon;
   final Function onChanged;
+  final Function onTapBirth;
   final FocusNode currentFocus;
   final FocusNode nextFocus;
   final BuildContext context;
   final TextInputAction textInputAction;
+  final bool isBirth;
   bool obscureText;
   //
   @override
@@ -41,7 +45,7 @@ class _AccountTextFieldState extends State<AccountTextField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          widget.title,
+          ' ${widget.title}',
           style: TextStyle(
             fontFamily: 'TTNorms',
             color: Colors.white,
@@ -66,7 +70,7 @@ class _AccountTextFieldState extends State<AccountTextField> {
             },
             textInputAction: widget.textInputAction ?? TextInputAction.done,
             textAlignVertical: TextAlignVertical.center,
-            keyboardType: widget.textInputType,
+            keyboardType: widget.textInputType ?? TextInputType.text,
             obscureText: widget.obscureText,
             maxLength: 64,
             style: TextStyle(
@@ -85,7 +89,7 @@ class _AccountTextFieldState extends State<AccountTextField> {
                   widget.icon,
                   color: Colors.white,
                 ),
-                onPressed: widget.onPressed,
+                onPressed: widget.onPressedPasswordIcon,
               ),
               counterText: '',
               hintText: widget.hintText,
@@ -97,6 +101,8 @@ class _AccountTextFieldState extends State<AccountTextField> {
               ),
               border: InputBorder.none,
             ),
+            readOnly: widget.isBirth == true ? true : false,
+            onTap: widget.onTapBirth,
             onChanged: widget.onChanged,
           ),
         ), //TextFormField

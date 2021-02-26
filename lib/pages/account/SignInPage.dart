@@ -52,11 +52,12 @@ class _SignInPageState extends State<SignInPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
-                    width: double.infinity,
+                    alignment: Alignment.centerLeft,
+                    //width: double.infinity,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 40),
+                        SizedBox(height: 20),
                         SparkHeader(),
                         SizedBox(height: 15),
                         Header1(title: 'Let\'s sign you in'),
@@ -82,7 +83,7 @@ class _SignInPageState extends State<SignInPage> {
                           onChanged: (value) {
                             //TODO Backend
                           },
-                        ), //TextFormField
+                        ), //email
                         SizedBox(height: 20),
                         AccountTextField(
                           currentFocus: passwordFocus,
@@ -92,7 +93,7 @@ class _SignInPageState extends State<SignInPage> {
                           textInputType: TextInputType.text,
                           obscureText: passwordObscureText,
                           icon: visibilityIcon,
-                          onPressed: () {
+                          onPressedPasswordIcon: () {
                             setState(() {
                               if (visibilityIcon == Icons.visibility) {
                                 //text can be read
@@ -119,7 +120,7 @@ class _SignInPageState extends State<SignInPage> {
                               }
                             });
                           },
-                        ),
+                        ), //password
                         SizedBox(height: 100),
                       ],
                     ),
@@ -155,7 +156,7 @@ class _SignInPageState extends State<SignInPage> {
                             //TODO Backend
                           },
                         ), //button
-                        SizedBox(height: 40),
+                        SizedBox(height: 20),
                       ],
                     ),
                   ), //footer
