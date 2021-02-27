@@ -5,7 +5,11 @@ import 'package:spark/components/ScrollBehavior.dart';
 import 'package:spark/components/Buttons.dart';
 import 'package:spark/components/Headers.dart';
 import 'package:spark/constants/Colors.dart';
+import 'package:transition/transition.dart';
+import 'package:spark/user.dart';
+import 'package:string_validator/string_validator.dart';
 import 'SignUpPage.dart';
+import 'package:spark/components/TextStyles.dart';
 
 class SignInPage extends StatefulWidget {
   //
@@ -22,6 +26,12 @@ class _SignInPageState extends State<SignInPage> {
   int counter = 0;
   FocusNode emailFocus;
   FocusNode passwordFocus;
+  //
+  String email = '';
+  String password = '';
+
+  bool isEmailError = false;
+  bool isPasswordError = false;
   //
   @override
   void initState() {
@@ -78,21 +88,36 @@ class _SignInPageState extends State<SignInPage> {
                           hintText: 'example_name123@woogle.com',
                           textInputType: TextInputType.emailAddress,
                           obscureText: false,
-                          icon: null,
                           textInputAction: TextInputAction.next,
-                          onChanged: (value) {
-                            //TODO Backend
+                          formatErrorText: 'Couldn\'t verify email',
+                          isFormatErrorText: isEmailError,
+                          onChanged: (String value) {
+                            setState(() {
+                              //
+                              //Validation
+                              //
+                              if (isEmail(value)) {
+                                email = value;
+                                isEmailError = false;
+                              } else {
+                                email = '';
+                              }
+                              print(email);
+                            });
                           },
                         ), //email
                         SizedBox(height: 20),
                         AccountTextField(
+                          isPasswordTextField: true,
                           currentFocus: passwordFocus,
                           context: context,
                           title: 'Password',
-                          hintText: 'Not  \"password123\"  please',
+                          hintText: 'Hint: (a-z, A-Z, 0-9, symbols)',
                           textInputType: TextInputType.text,
                           obscureText: passwordObscureText,
                           icon: visibilityIcon,
+                          formatErrorText: 'At least 8 characters',
+                          isFormatErrorText: isPasswordError,
                           onPressedPasswordIcon: () {
                             setState(() {
                               if (visibilityIcon == Icons.visibility) {
@@ -107,8 +132,10 @@ class _SignInPageState extends State<SignInPage> {
                             });
                           },
                           onChanged: (value) {
-                            //TODO Backend
                             setState(() {
+                              //
+                              //Password's Visibility Algorithm
+                              //
                               if (value.length == 1 && counter == 0) {
                                 //first time
                                 visibilityIcon = Icons.visibility;
@@ -118,6 +145,16 @@ class _SignInPageState extends State<SignInPage> {
                                 visibilityIcon = null;
                                 counter--;
                               }
+                              //
+                              //Validation
+                              //
+                              if (value.length > 7 && isAscii(value) && !contains(value, ' ')) {
+                                password = value;
+                                isPasswordError = false;
+                              } else {
+                                password = '';
+                              }
+                              print(password);
                             });
                           },
                         ), //password
@@ -135,12 +172,18 @@ class _SignInPageState extends State<SignInPage> {
                             SizedBox(width: 5),
                             GestureDetector(
                               onTap: () {
-                                Navigator.pushReplacementNamed(context, SignUpPage.id);
+                                Navigator.push(
+                                  context,
+                                  Transition(
+                                    child: SignUpPage(),
+                                    transitionEffect: TransitionEffect.leftToRight,
+                                    curve: Curves.decelerate,
+                                  ).builder(),
+                                );
                               },
                               child: Text(
                                 'Sign up!',
-                                style: TextStyle(
-                                  fontFamily: 'TTNorms',
+                                style: CustomTextStyle(
                                   color: kSparkHeaderRed,
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
@@ -153,7 +196,18 @@ class _SignInPageState extends State<SignInPage> {
                         AccountButton(
                           title: 'Sign In',
                           onTap: () {
-                            //TODO Backend
+                            setState(() {
+                              if (email == '') {
+                                isEmailError = true;
+                              }
+                              if (password == '') {
+                                isPasswordError = true;
+                              }
+                              if (email != '' && password != '') {
+                                print('Success!');
+                                //TODO Backend
+                              }
+                            });
                           },
                         ), //button
                         SizedBox(height: 20),

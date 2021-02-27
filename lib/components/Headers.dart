@@ -1,18 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:spark/constants/Colors.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:spark/components/TextStyles.dart';
 
 class SparkHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
       'SPARK',
-      style: TextStyle(
-        fontFamily: 'TTNorms',
+      style: CustomTextStyle(
         color: kSparkHeaderRed,
         fontSize: 15,
         fontWeight: FontWeight.bold,
       ),
     );
+    //  TypewriterAnimatedTextKit(
+    //   text: [
+    //     "SPARK",
+    //   ],
+    //   textStyle: TextStyle(
+    //     fontFamily: 'TTNorms',
+    //     color: kSparkHeaderRed,
+    //     fontSize: 15,
+    //     fontWeight: FontWeight.bold,
+    //   ),
+    //   textAlign: TextAlign.start,
+    //   //isRepeatingAnimation: false,
+    //   speed: Duration(milliseconds: 500),
+    //   pause: Duration(milliseconds: 500),
+    // ),
   }
 }
 
@@ -26,8 +42,7 @@ class Header1 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       title,
-      style: TextStyle(
-        fontFamily: 'TTNorms',
+      style: CustomTextStyle(
         color: Colors.white,
         fontSize: 29,
         fontWeight: FontWeight.w400,
@@ -48,8 +63,7 @@ class Header2 extends StatelessWidget {
       opacity: .65,
       child: Text(
         title,
-        style: TextStyle(
-          fontFamily: 'TTNorms',
+        style: CustomTextStyle(
           color: Colors.white,
           fontSize: 15,
           fontWeight: FontWeight.normal,

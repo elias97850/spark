@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:spark/constants/Colors.dart';
+import 'package:spark/components/TextStyles.dart';
 
 class AccountButton extends StatelessWidget {
   //
@@ -13,19 +15,23 @@ class AccountButton extends StatelessWidget {
   //
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: 70,
-        width: 300,
-        decoration: BoxDecoration(
-          color: kSparkHeaderRed,
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+    return Container(
+      height: 70,
+      width: 300,
+      decoration: BoxDecoration(
+        color: kSparkHeaderRed,
+        borderRadius: new BorderRadius.circular(10.0),
+      ),
+      child: RaisedButton(
+        color: kSparkHeaderRed,
+        shape: RoundedRectangleBorder(
+          borderRadius: new BorderRadius.circular(10.0),
         ),
+        onPressed: onTap,
         child: Center(
           child: Text(
             title,
-            style: TextStyle(
+            style: CustomTextStyle(
               color: Colors.white,
               fontSize: 18,
               fontWeight: FontWeight.w600,
@@ -34,5 +40,26 @@ class AccountButton extends StatelessWidget {
         ),
       ),
     );
+    //   GestureDetector(
+    //   onTap: onTap,
+    //   child: Container(
+    //     height: 70,
+    //     width: 300,
+    //     decoration: BoxDecoration(
+    //       color: kSparkHeaderRed,
+    //       borderRadius: BorderRadius.all(Radius.circular(10)),
+    //     ),
+    //     child: Center(
+    //       child: Text(
+    //         title,
+    //         style: CustomTextStyle(
+    //           color: Colors.white,
+    //           fontSize: 18,
+    //           fontWeight: FontWeight.w600,
+    //         ),
+    //       ),
+    //     ),
+    //   ),
+    // );
   }
 }

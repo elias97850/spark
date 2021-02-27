@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:spark/constants/Colors.dart';
+import 'package:spark/components/TextStyles.dart';
 
 class AccountTextField extends StatefulWidget {
   //
@@ -9,7 +10,10 @@ class AccountTextField extends StatefulWidget {
     @required this.onChanged,
     @required this.currentFocus,
     @required this.context,
+    @required this.formatErrorText,
+    @required this.isFormatErrorText,
     this.nextFocus,
+    this.isPasswordTextField,
     this.textInputType,
     this.icon,
     this.textInputAction,
@@ -31,7 +35,11 @@ class AccountTextField extends StatefulWidget {
   final BuildContext context;
   final TextInputAction textInputAction;
   final bool isBirth;
+  final String formatErrorText;
+  final bool isFormatErrorText;
+  final bool isPasswordTextField;
   bool obscureText;
+
   //
   @override
   _AccountTextFieldState createState() => _AccountTextFieldState();
@@ -44,15 +52,68 @@ class _AccountTextFieldState extends State<AccountTextField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          ' ${widget.title}',
-          style: TextStyle(
-            fontFamily: 'TTNorms',
-            color: Colors.white,
-            fontSize: 15,
-            fontWeight: FontWeight.w600,
-          ),
-        ), //Title
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              ' ${widget.title}',
+              style: CustomTextStyle(
+                color: Colors.white,
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+              ),
+            ), //Title
+            SizedBox(width: 5),
+            widget.isFormatErrorText == true
+                ? Container(
+                    child: Row(
+                      //mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.error_outline,
+                          color: Colors.yellow,
+                          size: 18,
+                        ),
+                        widget.isPasswordTextField == true
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    ' ${widget.formatErrorText}  ',
+                                    //widget.formatErrorText,
+                                    style: CustomTextStyle(
+                                      color: Colors.yellow,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                  Text(
+                                    ' (a-z, A-Z, 0-9, symbols)  ',
+                                    //widget.formatErrorText,
+                                    style: CustomTextStyle(
+                                      color: Colors.yellow,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : Text(
+                                ' ${widget.formatErrorText}  ',
+                                //widget.formatErrorText,
+                                style: CustomTextStyle(
+                                  color: Colors.yellow,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                      ],
+                    ),
+                  )
+                : SizedBox(),
+          ],
+        ), //Title & Error Message
         SizedBox(height: 15),
         Container(
           alignment: Alignment.centerLeft,
@@ -73,8 +134,7 @@ class _AccountTextFieldState extends State<AccountTextField> {
             keyboardType: widget.textInputType ?? TextInputType.text,
             obscureText: widget.obscureText,
             maxLength: 64,
-            style: TextStyle(
-              fontFamily: 'TTNorms',
+            style: CustomTextStyle(
               color: Colors.white,
               fontSize: 15,
               fontWeight: FontWeight.normal,
@@ -93,8 +153,7 @@ class _AccountTextFieldState extends State<AccountTextField> {
               ),
               counterText: '',
               hintText: widget.hintText,
-              hintStyle: TextStyle(
-                fontFamily: 'TTNorms',
+              hintStyle: CustomTextStyle(
                 color: kTextGray,
                 fontSize: 14,
                 fontWeight: FontWeight.normal,

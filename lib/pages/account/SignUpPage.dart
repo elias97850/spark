@@ -6,7 +6,11 @@ import 'package:spark/components/Buttons.dart';
 import 'package:spark/components/Headers.dart';
 import 'package:spark/constants/Colors.dart';
 import 'package:flutter_holo_date_picker/flutter_holo_date_picker.dart';
+import 'package:transition/transition.dart';
+import 'package:spark/components/TextStyles.dart';
 import 'SignInPage.dart';
+import 'package:string_validator/string_validator.dart';
+import 'package:spark/user.dart';
 
 class SignUpPage extends StatefulWidget {
   //
@@ -28,9 +32,15 @@ class _SignUpPageState extends State<SignUpPage> {
   int dateYear;
   int dateMonth;
   int dateDay;
-  int birthdayHolder;
-  String dateText;
   bool showDate = false;
+  //
+  String dateText;
+  int birthdayHolder;
+
+  bool isNameError = false;
+  bool isEmailError = false;
+  bool isPasswordError = false;
+  bool isBirthDateError = false;
   //
   ///Sets the date into the vars
   void setDate({year, month, day}) {
@@ -47,18 +57,6 @@ class _SignUpPageState extends State<SignUpPage> {
       if ((DateTime.now().day - dateDay) < 0) birthdayHolder = ((DateTime.now().year - dateYear) - 1);
       if ((DateTime.now().day - dateDay) >= 0) birthdayHolder = (DateTime.now().year - dateYear);
     } else if ((DateTime.now().month - dateMonth) > 0) birthdayHolder = (DateTime.now().year - dateYear);
-  }
-
-  void birthdayError() {
-    if (birthdayHolder < 18)
-      setState(() {
-        //TODO
-        print("Must be 18 or older to register.");
-      });
-    else
-      setState(() {
-        print(birthdayHolder);
-      });
   }
 
   //
@@ -87,6 +85,7 @@ class _SignUpPageState extends State<SignUpPage> {
             child: ConstrainedBox(
               constraints: BoxConstraints(
                 maxHeight: MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top,
+                //TODO change after WelcomePage has been created and sizes have been taken
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -110,18 +109,32 @@ class _SignUpPageState extends State<SignUpPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         AccountTextField(
-                          context: context,
-                          currentFocus: nameFocus,
-                          nextFocus: emailFocus,
-                          title: 'Name',
-                          hintText: 'Example Name',
-                          textInputType: TextInputType.text,
-                          obscureText: false,
-                          textInputAction: TextInputAction.next,
-                          onChanged: (value) {
-                            //TODO Backend
-                          },
-                        ), //name
+                            context: context,
+                            currentFocus: nameFocus,
+                            nextFocus: emailFocus,
+                            title: 'F. Name',
+                            hintText: 'Example Name',
+                            textInputType: TextInputType.text,
+                            obscureText: false,
+                            textInputAction: TextInputAction.next,
+                            //TODO animate appearance of error
+                            formatErrorText: 'Only letters (a-z, A-Z)',
+                            isFormatErrorText: isNameError,
+                            onChanged: (value) {
+                              setState(() {
+                                //
+                                //Validation
+                                //
+                                if (isAlpha(value)) {
+                                  User.name = value;
+                                  isNameError = false;
+                                } else {
+                                  User.name = '';
+                                }
+                              });
+                              print(User.name);
+                            } // cleans the vars
+                            ), //name
                         SizedBox(height: 20),
                         AccountTextField(
                           context: context,
@@ -132,12 +145,26 @@ class _SignUpPageState extends State<SignUpPage> {
                           textInputType: TextInputType.emailAddress,
                           obscureText: false,
                           textInputAction: TextInputAction.next,
-                          onChanged: (value) {
-                            //TODO Backend
+                          formatErrorText: 'Couldn\'t verify email',
+                          isFormatErrorText: isEmailError,
+                          onChanged: (String value) {
+                            setState(() {
+                              //
+                              //Validation
+                              //
+                              if (isEmail(value)) {
+                                User.email = value;
+                                isEmailError = false;
+                              } else {
+                                User.email = '';
+                              }
+                              print(User.email);
+                            });
                           },
                         ), //email
                         SizedBox(height: 20),
                         AccountTextField(
+                          isPasswordTextField: true,
                           currentFocus: passwordFocus,
                           context: context,
                           title: 'Password',
@@ -145,6 +172,8 @@ class _SignUpPageState extends State<SignUpPage> {
                           textInputType: TextInputType.text,
                           obscureText: passwordObscureText,
                           icon: visibilityIcon,
+                          formatErrorText: 'At least 8 characters',
+                          isFormatErrorText: isPasswordError,
                           onPressedPasswordIcon: () {
                             setState(() {
                               if (visibilityIcon == Icons.visibility) {
@@ -159,8 +188,10 @@ class _SignUpPageState extends State<SignUpPage> {
                             });
                           },
                           onChanged: (value) {
-                            //TODO Backend
                             setState(() {
+                              //
+                              //Password's Visibility Algorithm
+                              //
                               if (value.length == 1 && counter == 0) {
                                 //first time
                                 visibilityIcon = Icons.visibility;
@@ -170,6 +201,16 @@ class _SignUpPageState extends State<SignUpPage> {
                                 visibilityIcon = null;
                                 counter--;
                               }
+                              //
+                              //Validation
+                              //
+                              if (value.length > 7 && isAscii(value) && !contains(value, ' ')) {
+                                User.password = value;
+                                isPasswordError = false;
+                              } else {
+                                User.password = '';
+                              }
+                              print(User.password);
                             });
                           },
                         ), //password
@@ -181,11 +222,10 @@ class _SignUpPageState extends State<SignUpPage> {
                           title: 'Birth Date',
                           hintText: dateText ?? 'dd/mm/yyyy',
                           obscureText: false,
-                          onChanged: (value) {
-                            //TODO Backend
-                          },
+                          formatErrorText: 'Only for 18+',
+                          isFormatErrorText: isBirthDateError,
+                          onChanged: (value) {},
                           onTapBirth: () async {
-                            //TODO date popup
                             await DatePicker.showSimpleDatePicker(
                               context,
                               backgroundColor: kAppBackgroundColor,
@@ -199,11 +239,26 @@ class _SignUpPageState extends State<SignUpPage> {
                             ).then((date) {
                               setState(() {
                                 if (date != null) {
+                                  //
+                                  //Date Calculation
+                                  //
                                   dateText = '${date.day}/${date.month}/${date.year}';
                                   showDate = true;
                                   setDate(year: date.year, month: date.month, day: date.day);
                                   setAge();
-                                  birthdayError();
+                                  //
+                                  //Validation
+                                  //
+                                  if (birthdayHolder >= 18) {
+                                    User.birthDate = dateText;
+                                    User.age = birthdayHolder;
+                                    isBirthDateError = false;
+                                  } else {
+                                    User.birthDate = '';
+                                    User.age = 0;
+                                  }
+                                  print(User.birthDate);
+                                  print(User.age);
                                 }
                               });
                             });
@@ -221,14 +276,44 @@ class _SignUpPageState extends State<SignUpPage> {
                           children: [
                             Header2(title: 'Already have an account?'),
                             SizedBox(width: 5),
+                            // OpenContainer(
+                            //   transitionType: ContainerTransitionType.fade,
+                            //   closedElevation: 0,
+                            //   openElevation: 0,
+                            //   closedColor: kAppBackgroundColor,
+                            //   openColor: kAppBackgroundColor,
+                            //   transitionDuration: Duration(milliseconds: 800),
+                            //   closedBuilder: (context, openWidget) {
+                            //     //Normal Widget
+                            //     return Text(
+                            //       'Sign In!',
+                            //       style: TextStyle(
+                            //         fontFamily: 'TTNorms',
+                            //         color: kSparkHeaderRed,
+                            //         fontSize: 15,
+                            //         fontWeight: FontWeight.bold,
+                            //       ),
+                            //     );
+                            //   },
+                            //   openBuilder: (context, closedWidget) {
+                            //     //New Widget
+                            //     return SignInPage();
+                            //   },
+                            // ),
                             GestureDetector(
                               onTap: () {
-                                Navigator.pushReplacementNamed(context, SignInPage.id);
+                                Navigator.push(
+                                  context,
+                                  Transition(
+                                    child: SignInPage(),
+                                    transitionEffect: TransitionEffect.rightToLeft,
+                                    curve: Curves.decelerate,
+                                  ).builder(),
+                                );
                               },
                               child: Text(
                                 'Sign In!',
-                                style: TextStyle(
-                                  fontFamily: 'TTNorms',
+                                style: CustomTextStyle(
                                   color: kSparkHeaderRed,
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
@@ -241,7 +326,27 @@ class _SignUpPageState extends State<SignUpPage> {
                         AccountButton(
                           title: 'Sign Up',
                           onTap: () {
-                            //TODO Backend
+                            setState(() {
+                              if (User.name == '') {
+                                isNameError = true;
+                              }
+                              if (User.email == '') {
+                                isEmailError = true;
+                              }
+                              if (User.password == '') {
+                                isPasswordError = true;
+                              }
+                              if (User.age == 0) {
+                                isBirthDateError = true;
+                              }
+                              if (User.name != '' &&
+                                  User.email != '' &&
+                                  User.password != '' &&
+                                  User.age >= 18) {
+                                print('Success!');
+                                //TODO Backend
+                              }
+                            });
                           },
                         ), //button
                         SizedBox(height: 20),
