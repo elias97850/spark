@@ -54,6 +54,7 @@ class _AccountTextFieldState extends State<AccountTextField> {
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Text(
               ' ${widget.title}',
@@ -67,8 +68,7 @@ class _AccountTextFieldState extends State<AccountTextField> {
             widget.isFormatErrorText == true
                 ? Container(
                     child: Row(
-                      //mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Icon(
                           Icons.error_outline,
@@ -77,7 +77,7 @@ class _AccountTextFieldState extends State<AccountTextField> {
                         ),
                         widget.isPasswordTextField == true
                             ? Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   Text(
                                     ' ${widget.formatErrorText}  ',

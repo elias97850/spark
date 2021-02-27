@@ -112,7 +112,7 @@ class _SignInPageState extends State<SignInPage> {
                           currentFocus: passwordFocus,
                           context: context,
                           title: 'Password',
-                          hintText: 'Hint: (a-z, A-Z, 0-9, symbols)',
+                          hintText: 'We hope you remember this  O.O',
                           textInputType: TextInputType.text,
                           obscureText: passwordObscureText,
                           icon: visibilityIcon,
