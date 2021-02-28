@@ -37,10 +37,10 @@ class _SignUpPageState extends State<SignUpPage> {
   String dateText;
   int birthdayHolder;
 
-  bool isNameError = false;
-  bool isEmailError = false;
-  bool isPasswordError = false;
-  bool isBirthDateError = false;
+  bool showNameError = false;
+  bool showEmailError = false;
+  bool showPasswordError = false;
+  bool showBirthDateError = false;
   //
   ///Sets the date into the vars
   void setDate({year, month, day}) {
@@ -110,24 +110,25 @@ class _SignUpPageState extends State<SignUpPage> {
                       children: [
                         AccountTextField(
                             context: context,
-                            currentFocus: nameFocus,
-                            nextFocus: emailFocus,
                             title: 'F. Name',
                             hintText: 'Example Name',
-                            textInputType: TextInputType.text,
-                            obscureText: false,
-                            textInputAction: TextInputAction.next,
-                            //TODO animate appearance of error
                             formatErrorText: 'Only letters (a-z, A-Z)',
-                            isFormatErrorText: isNameError,
+                            //TODO animate appearance of error
+                            showTextFormatError: showNameError,
+                            maxLength: 15,
+                            currentFocus: nameFocus,
+                            nextFocus: emailFocus,
+                            textInputType: TextInputType.text,
+                            textInputAction: TextInputAction.next,
+                            obscureText: false,
                             onChanged: (value) {
                               setState(() {
                                 //
                                 //Validation
                                 //
-                                if (isAlpha(value)) {
-                                  User.name = value;
-                                  isNameError = false;
+                                if (isAlpha(trim(value))) {
+                                  User.name = trim(value);
+                                  showNameError = false;
                                 } else {
                                   User.name = '';
                                 }
@@ -138,23 +139,24 @@ class _SignUpPageState extends State<SignUpPage> {
                         SizedBox(height: 20),
                         AccountTextField(
                           context: context,
-                          currentFocus: emailFocus,
-                          nextFocus: passwordFocus,
                           title: 'Email',
                           hintText: 'example_name123@woogle.com',
-                          textInputType: TextInputType.emailAddress,
-                          obscureText: false,
-                          textInputAction: TextInputAction.next,
                           formatErrorText: 'Couldn\'t verify email',
-                          isFormatErrorText: isEmailError,
+                          showTextFormatError: showEmailError,
+                          maxLength: 64,
+                          currentFocus: emailFocus,
+                          nextFocus: passwordFocus,
+                          textInputType: TextInputType.emailAddress,
+                          textInputAction: TextInputAction.next,
+                          obscureText: false,
                           onChanged: (String value) {
                             setState(() {
                               //
                               //Validation
                               //
-                              if (isEmail(value)) {
-                                User.email = value;
-                                isEmailError = false;
+                              if (isEmail(trim(value))) {
+                                User.email = trim(value);
+                                showEmailError = false;
                               } else {
                                 User.email = '';
                               }
@@ -164,16 +166,17 @@ class _SignUpPageState extends State<SignUpPage> {
                         ), //email
                         SizedBox(height: 20),
                         AccountTextField(
-                          isPasswordTextField: true,
-                          currentFocus: passwordFocus,
                           context: context,
                           title: 'Password',
                           hintText: 'Not  \"password123\"  please',
+                          formatErrorText: 'At least 8 characters',
+                          showTextFormatError: showPasswordError,
+                          maxLength: 20,
+                          currentFocus: passwordFocus,
                           textInputType: TextInputType.text,
                           obscureText: passwordObscureText,
                           icon: visibilityIcon,
-                          formatErrorText: 'At least 8 characters',
-                          isFormatErrorText: isPasswordError,
+                          isPasswordTextField: true,
                           onPressedPasswordIcon: () {
                             setState(() {
                               if (visibilityIcon == Icons.visibility) {
@@ -204,9 +207,11 @@ class _SignUpPageState extends State<SignUpPage> {
                               //
                               //Validation
                               //
-                              if (value.length > 7 && isAscii(value) && !contains(value, ' ')) {
-                                User.password = value;
-                                isPasswordError = false;
+                              if (trim(value).length > 7 &&
+                                  isAscii(trim(value)) &&
+                                  !contains(trim(value), ' ')) {
+                                User.password = trim(value);
+                                showPasswordError = false;
                               } else {
                                 User.password = '';
                               }
@@ -216,16 +221,17 @@ class _SignUpPageState extends State<SignUpPage> {
                         ), //password
                         SizedBox(height: 20),
                         AccountTextField(
-                          isBirth: true,
                           context: context,
-                          currentFocus: birthFocus,
                           title: 'Birth Date',
                           hintText: dateText ?? 'dd/mm/yyyy',
-                          obscureText: false,
                           formatErrorText: 'Only for 18+',
-                          isFormatErrorText: isBirthDateError,
+                          showTextFormatError: showBirthDateError,
+                          maxLength: 15,
+                          currentFocus: birthFocus,
+                          obscureText: false,
+                          isBirthTextField: true,
                           onChanged: (value) {},
-                          onTapBirth: () async {
+                          onTapBirthTextField: () async {
                             await DatePicker.showSimpleDatePicker(
                               context,
                               backgroundColor: kAppBackgroundColor,
@@ -252,7 +258,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                   if (birthdayHolder >= 18) {
                                     User.birthDate = dateText;
                                     User.age = birthdayHolder;
-                                    isBirthDateError = false;
+                                    showBirthDateError = false;
                                   } else {
                                     User.birthDate = '';
                                     User.age = 0;
@@ -263,7 +269,7 @@ class _SignUpPageState extends State<SignUpPage> {
                               });
                             });
                           },
-                        ), //date of birth
+                        ), //birth date
                         SizedBox(height: 50),
                       ],
                     ),
@@ -328,16 +334,16 @@ class _SignUpPageState extends State<SignUpPage> {
                           onTap: () {
                             setState(() {
                               if (User.name == '') {
-                                isNameError = true;
+                                showNameError = true;
                               }
                               if (User.email == '') {
-                                isEmailError = true;
+                                showEmailError = true;
                               }
                               if (User.password == '') {
-                                isPasswordError = true;
+                                showPasswordError = true;
                               }
                               if (User.age == 0) {
-                                isBirthDateError = true;
+                                showBirthDateError = true;
                               }
                               if (User.name != '' &&
                                   User.email != '' &&

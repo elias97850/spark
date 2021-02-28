@@ -30,8 +30,8 @@ class _SignInPageState extends State<SignInPage> {
   String email = '';
   String password = '';
 
-  bool isEmailError = false;
-  bool isPasswordError = false;
+  bool showEmailError = false;
+  bool showPasswordError = false;
   //
   @override
   void initState() {
@@ -82,23 +82,24 @@ class _SignInPageState extends State<SignInPage> {
                       children: [
                         AccountTextField(
                           context: context,
-                          currentFocus: emailFocus,
-                          nextFocus: passwordFocus,
                           title: 'Email',
                           hintText: 'example_name123@woogle.com',
-                          textInputType: TextInputType.emailAddress,
-                          obscureText: false,
-                          textInputAction: TextInputAction.next,
                           formatErrorText: 'Couldn\'t verify email',
-                          isFormatErrorText: isEmailError,
+                          showTextFormatError: showEmailError,
+                          maxLength: 64,
+                          currentFocus: emailFocus,
+                          nextFocus: passwordFocus,
+                          textInputType: TextInputType.emailAddress,
+                          textInputAction: TextInputAction.next,
+                          obscureText: false,
                           onChanged: (String value) {
                             setState(() {
                               //
                               //Validation
                               //
-                              if (isEmail(value)) {
-                                email = value;
-                                isEmailError = false;
+                              if (isEmail(trim(value))) {
+                                email = trim(value);
+                                showEmailError = false;
                               } else {
                                 email = '';
                               }
@@ -108,16 +109,17 @@ class _SignInPageState extends State<SignInPage> {
                         ), //email
                         SizedBox(height: 20),
                         AccountTextField(
-                          isPasswordTextField: true,
-                          currentFocus: passwordFocus,
                           context: context,
                           title: 'Password',
                           hintText: 'We hope you remember this  O.O',
+                          formatErrorText: 'At least 8 characters',
+                          showTextFormatError: showPasswordError,
+                          maxLength: 20,
+                          currentFocus: passwordFocus,
                           textInputType: TextInputType.text,
                           obscureText: passwordObscureText,
                           icon: visibilityIcon,
-                          formatErrorText: 'At least 8 characters',
-                          isFormatErrorText: isPasswordError,
+                          isPasswordTextField: true,
                           onPressedPasswordIcon: () {
                             setState(() {
                               if (visibilityIcon == Icons.visibility) {
@@ -148,9 +150,11 @@ class _SignInPageState extends State<SignInPage> {
                               //
                               //Validation
                               //
-                              if (value.length > 7 && isAscii(value) && !contains(value, ' ')) {
-                                password = value;
-                                isPasswordError = false;
+                              if (trim(value).length > 7 &&
+                                  isAscii(trim(value)) &&
+                                  !contains(trim(value), ' ')) {
+                                password = trim(value);
+                                showPasswordError = false;
                               } else {
                                 password = '';
                               }
@@ -198,10 +202,10 @@ class _SignInPageState extends State<SignInPage> {
                           onTap: () {
                             setState(() {
                               if (email == '') {
-                                isEmailError = true;
+                                showEmailError = true;
                               }
                               if (password == '') {
-                                isPasswordError = true;
+                                showPasswordError = true;
                               }
                               if (email != '' && password != '') {
                                 print('Success!');

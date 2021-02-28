@@ -1,51 +1,91 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:spark/constants/Colors.dart';
 import 'package:spark/components/TextStyles.dart';
 
 class AccountTextField extends StatefulWidget {
   //
   AccountTextField({
-    @required this.hintText,
-    @required this.title,
-    @required this.onChanged,
-    @required this.currentFocus,
     @required this.context,
+    @required this.title,
+    @required this.hintText,
     @required this.formatErrorText,
-    @required this.isFormatErrorText,
+    @required this.showTextFormatError,
+    @required this.onChanged,
+    @required this.maxLength,
+    @required this.currentFocus,
     this.nextFocus,
-    this.isPasswordTextField,
     this.textInputType,
-    this.icon,
     this.textInputAction,
-    this.onPressedPasswordIcon,
-    this.onTapBirth,
     this.obscureText,
-    this.isBirth,
+    this.icon,
+    this.onPressedPasswordIcon,
+    this.onTapBirthTextField,
+    this.isPasswordTextField,
+    this.isBirthTextField,
   });
   //
-  final String hintText;
-  final TextInputType textInputType;
+  final BuildContext context;
   final String title;
-  final IconData icon;
-  final Function onPressedPasswordIcon;
+  final String hintText;
+  final String formatErrorText;
+  final bool showTextFormatError;
   final Function onChanged;
-  final Function onTapBirth;
+  final int maxLength;
   final FocusNode currentFocus;
   final FocusNode nextFocus;
-  final BuildContext context;
+  final TextInputType textInputType;
   final TextInputAction textInputAction;
-  final bool isBirth;
-  final String formatErrorText;
-  final bool isFormatErrorText;
+  final bool obscureText;
+  final IconData icon;
+  final Function onPressedPasswordIcon;
+  final Function onTapBirthTextField;
   final bool isPasswordTextField;
-  bool obscureText;
-
+  final bool isBirthTextField;
   //
   @override
   _AccountTextFieldState createState() => _AccountTextFieldState();
 }
 
 class _AccountTextFieldState extends State<AccountTextField> {
+  //
+  InputDecoration inputDecorationChooser() {
+    if (widget.isPasswordTextField == true) {
+      return InputDecoration(
+        suffixIcon: IconButton(
+          padding: EdgeInsets.all(0),
+          alignment: Alignment.centerRight,
+          splashRadius: 0.1,
+          iconSize: 24,
+          icon: Icon(
+            widget.icon,
+            color: Colors.white,
+          ),
+          onPressed: widget.onPressedPasswordIcon,
+        ),
+        counterText: '',
+        hintText: widget.hintText,
+        hintStyle: CustomTextStyle(
+          color: kTextGray,
+          fontSize: 14,
+          fontWeight: FontWeight.normal,
+        ),
+        border: InputBorder.none,
+      );
+    } else {
+      return InputDecoration(
+        counterText: '',
+        hintText: widget.hintText,
+        hintStyle: CustomTextStyle(
+          color: kTextGray,
+          fontSize: 14,
+          fontWeight: FontWeight.normal,
+        ),
+        border: InputBorder.none,
+      );
+    }
+  }
+
   //
   @override
   Widget build(BuildContext context) {
@@ -65,7 +105,7 @@ class _AccountTextFieldState extends State<AccountTextField> {
               ),
             ), //Title
             SizedBox(width: 5),
-            widget.isFormatErrorText == true
+            widget.showTextFormatError == true
                 ? Container(
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.end,
@@ -130,38 +170,19 @@ class _AccountTextFieldState extends State<AccountTextField> {
               FocusScope.of(widget.context).requestFocus(widget.nextFocus);
             },
             textInputAction: widget.textInputAction ?? TextInputAction.done,
-            textAlignVertical: TextAlignVertical.center,
+            textAlignVertical:
+                widget.isPasswordTextField == true ? TextAlignVertical.center : TextAlignVertical.top,
             keyboardType: widget.textInputType ?? TextInputType.text,
             obscureText: widget.obscureText,
-            maxLength: 64,
+            maxLength: widget.maxLength,
             style: CustomTextStyle(
               color: Colors.white,
               fontSize: 15,
               fontWeight: FontWeight.normal,
             ),
-            decoration: InputDecoration(
-              suffixIcon: IconButton(
-                padding: EdgeInsets.all(0),
-                alignment: Alignment.centerRight,
-                splashRadius: 0.1,
-                iconSize: 24,
-                icon: Icon(
-                  widget.icon,
-                  color: Colors.white,
-                ),
-                onPressed: widget.onPressedPasswordIcon,
-              ),
-              counterText: '',
-              hintText: widget.hintText,
-              hintStyle: CustomTextStyle(
-                color: kTextGray,
-                fontSize: 14,
-                fontWeight: FontWeight.normal,
-              ),
-              border: InputBorder.none,
-            ),
-            readOnly: widget.isBirth == true ? true : false,
-            onTap: widget.onTapBirth,
+            decoration: inputDecorationChooser(),
+            readOnly: widget.isBirthTextField == true ? true : false,
+            onTap: widget.onTapBirthTextField,
             onChanged: widget.onChanged,
           ),
         ), //TextFormField
