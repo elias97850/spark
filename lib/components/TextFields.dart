@@ -1,3 +1,4 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:spark/constants/Colors.dart';
@@ -105,53 +106,33 @@ class _AccountTextFieldState extends State<AccountTextField> {
               ),
             ), //Title
             SizedBox(width: 5),
-            widget.showTextFormatError == true
-                ? Container(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Icon(
-                          Icons.error_outline,
-                          color: Colors.yellow,
-                          size: 18,
-                        ),
-                        widget.isPasswordTextField == true
-                            ? Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Text(
-                                    ' ${widget.formatErrorText}  ',
-                                    //widget.formatErrorText,
-                                    style: CustomTextStyle(
-                                      color: Colors.yellow,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.normal,
-                                    ),
-                                  ),
-                                  Text(
-                                    ' (a-z, A-Z, 0-9, symbols)  ',
-                                    //widget.formatErrorText,
-                                    style: CustomTextStyle(
-                                      color: Colors.yellow,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.normal,
-                                    ),
-                                  ),
-                                ],
-                              )
-                            : Text(
-                                ' ${widget.formatErrorText}  ',
-                                //widget.formatErrorText,
-                                style: CustomTextStyle(
-                                  color: Colors.yellow,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.normal,
-                                ),
-                              ),
-                      ],
+
+            AnimatedOpacity(
+              duration: Duration(milliseconds: 400),
+              opacity: widget.showTextFormatError == true ? 1 : 0,
+              child: Container(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Icon(
+                      Icons.error_outline,
+                      color: Colors.yellow,
+                      size: 18,
                     ),
-                  )
-                : SizedBox(),
+                    SizedBox(
+                      child: Text(
+                        ' ${widget.formatErrorText}  ',
+                        style: CustomTextStyle(
+                          color: Colors.yellow,
+                          fontSize: 15,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
           ],
         ), //Title & Error Message
         SizedBox(height: 15),

@@ -5,6 +5,7 @@ import 'package:spark/components/ScrollBehavior.dart';
 import 'package:spark/components/Buttons.dart';
 import 'package:spark/components/Headers.dart';
 import 'package:spark/constants/Colors.dart';
+import 'package:spark/pages/quiz/QuizPage.dart';
 import 'package:transition/transition.dart';
 import 'package:spark/user.dart';
 import 'package:string_validator/string_validator.dart';
@@ -162,7 +163,34 @@ class _SignInPageState extends State<SignInPage> {
                             });
                           },
                         ), //password
-                        SizedBox(height: 100),
+                        SizedBox(height: 10),
+                        Container(
+                          width: double.infinity,
+                          alignment: Alignment.bottomRight,
+                          transformAlignment: Alignment.bottomRight,
+                          child: GestureDetector(
+                            onTap: () {
+                              //TODO backend of forgot password
+                              // Navigator.push(
+                              //   context,
+                              //   Transition(
+                              //     child: SignUpPage(),
+                              //     transitionEffect: TransitionEffect.leftToRight,
+                              //     curve: Curves.decelerate,
+                              //   ).builder(),
+                              // );
+                            },
+                            child: Text(
+                              'Forgot your password? ',
+                              style: CustomTextStyle(
+                                color: kSparkHeaderRed,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ), //Forgot Password redirection
+                        SizedBox(height: 90),
                       ],
                     ),
                   ), //input
@@ -208,8 +236,18 @@ class _SignInPageState extends State<SignInPage> {
                                 showPasswordError = true;
                               }
                               if (email != '' && password != '') {
-                                print('Success!');
+                                //
                                 //TODO Backend
+                                //
+                                print('Success!');
+                                Navigator.push(
+                                  context,
+                                  Transition(
+                                    child: QuizPage(),
+                                    transitionEffect: TransitionEffect.bottomToTop,
+                                    curve: Curves.decelerate,
+                                  ).builder(),
+                                );
                               }
                             });
                           },

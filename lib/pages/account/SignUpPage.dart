@@ -6,11 +6,13 @@ import 'package:spark/components/Buttons.dart';
 import 'package:spark/components/Headers.dart';
 import 'package:spark/constants/Colors.dart';
 import 'package:flutter_holo_date_picker/flutter_holo_date_picker.dart';
+import 'package:spark/pages/quiz/QuizPage.dart';
 import 'package:transition/transition.dart';
 import 'package:spark/components/TextStyles.dart';
 import 'SignInPage.dart';
 import 'package:string_validator/string_validator.dart';
 import 'package:spark/user.dart';
+import 'package:flutter_password_strength/flutter_password_strength.dart';
 
 class SignUpPage extends StatefulWidget {
   //
@@ -33,6 +35,8 @@ class _SignUpPageState extends State<SignUpPage> {
   int dateMonth;
   int dateDay;
   bool showDate = false;
+  String passwordHolder;
+  double passwordStrengthHolder = 0;
   //
   String dateText;
   int birthdayHolder;
@@ -169,7 +173,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           context: context,
                           title: 'Password',
                           hintText: 'Not  \"password123\"  please',
-                          formatErrorText: 'At least 8 characters',
+                          formatErrorText: '(a-z, A-Z, 0-9, symbols)',
                           showTextFormatError: showPasswordError,
                           maxLength: 20,
                           currentFocus: passwordFocus,
@@ -195,6 +199,7 @@ class _SignUpPageState extends State<SignUpPage> {
                               //
                               //Password's Visibility Algorithm
                               //
+                              passwordHolder = value;
                               if (value.length == 1 && counter == 0) {
                                 //first time
                                 visibilityIcon = Icons.visibility;
@@ -209,7 +214,8 @@ class _SignUpPageState extends State<SignUpPage> {
                               //
                               if (trim(value).length > 7 &&
                                   isAscii(trim(value)) &&
-                                  !contains(trim(value), ' ')) {
+                                  !contains(trim(value), ' ') &&
+                                  passwordStrengthHolder > 0.5) {
                                 User.password = trim(value);
                                 showPasswordError = false;
                               } else {
@@ -219,7 +225,46 @@ class _SignUpPageState extends State<SignUpPage> {
                             });
                           },
                         ), //password
-                        SizedBox(height: 20),
+                        SizedBox(height: 5),
+                        Center(
+                          child: Container(
+                            margin: EdgeInsets.symmetric(horizontal: 5),
+                            child: FlutterPasswordStrength(
+                              strengthCallback: (value) {
+                                passwordStrengthHolder = value;
+                              },
+                              backgroundColor: kAppBackgroundColor,
+                              password: passwordHolder,
+                              radius: 10,
+                              strengthColors: TweenSequence<Color>(
+                                [
+                                  TweenSequenceItem(
+                                    weight: 1.0,
+                                    tween: ColorTween(
+                                      begin: Colors.red,
+                                      end: Colors.yellow,
+                                    ),
+                                  ),
+                                  TweenSequenceItem(
+                                    weight: 1.0,
+                                    tween: ColorTween(
+                                      begin: Colors.yellow,
+                                      end: Colors.green,
+                                    ),
+                                  ),
+                                  TweenSequenceItem(
+                                    weight: 1.0,
+                                    tween: ColorTween(
+                                      begin: Colors.green,
+                                      end: Colors.blue,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 15),
                         AccountTextField(
                           context: context,
                           title: 'Birth Date',
@@ -270,7 +315,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             });
                           },
                         ), //birth date
-                        SizedBox(height: 50),
+                        SizedBox(height: 40),
                       ],
                     ),
                   ), //input
@@ -349,8 +394,18 @@ class _SignUpPageState extends State<SignUpPage> {
                                   User.email != '' &&
                                   User.password != '' &&
                                   User.age >= 18) {
-                                print('Success!');
+                                //
                                 //TODO Backend
+                                //
+                                print('Success!');
+                                Navigator.push(
+                                  context,
+                                  Transition(
+                                    child: QuizPage(),
+                                    transitionEffect: TransitionEffect.scale,
+                                    curve: Curves.decelerate,
+                                  ).builder(),
+                                );
                               }
                             });
                           },
