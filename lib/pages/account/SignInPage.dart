@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:spark/components/TextFields.dart';
-import 'package:spark/components/Scaffolds.dart';
-import 'package:spark/components/ScrollBehavior.dart';
+//
+import 'SignUpPage.dart';
+import 'package:spark/UserData.dart';
+import 'package:spark/constants/Colors.dart';
 import 'package:spark/components/Buttons.dart';
 import 'package:spark/components/Headers.dart';
-import 'package:spark/constants/Colors.dart';
 import 'package:spark/pages/quiz/QuizPage.dart';
+import 'package:spark/components/Scaffolds.dart';
+import 'package:spark/components/TextFields.dart';
+import 'package:spark/components/ScrollBehavior.dart';
+//
 import 'package:transition/transition.dart';
-import 'package:spark/user.dart';
-import 'package:string_validator/string_validator.dart';
-import 'SignUpPage.dart';
 import 'package:spark/components/TextStyles.dart';
+import 'package:string_validator/string_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SignInPage extends StatefulWidget {
   //
@@ -22,17 +25,33 @@ class SignInPage extends StatefulWidget {
 
 class _SignInPageState extends State<SignInPage> {
   //
+  //Booleans for Input Errors
+  //
+  bool showEmailError = false;
+  bool showPasswordError = false;
+  //
+  //Database
+  //
+  final _auth = FirebaseAuth.instance;
+  //
+  //FocusNodes
+  //
+  FocusNode emailFocus;
+  FocusNode passwordFocus;
+  //
+  //Password vars
+  //
   IconData visibilityIcon;
   bool passwordObscureText = true;
   int counter = 0;
-  FocusNode emailFocus;
-  FocusNode passwordFocus;
+  //
+  //User Data
   //
   String email = '';
   String password = '';
 
-  bool showEmailError = false;
-  bool showPasswordError = false;
+  //
+  //Build
   //
   @override
   void initState() {
@@ -227,7 +246,7 @@ class _SignInPageState extends State<SignInPage> {
                         SizedBox(height: 15),
                         AccountButton(
                           title: 'Sign In',
-                          onTap: () {
+                          onTap: () async {
                             setState(() {
                               if (email == '') {
                                 showEmailError = true;
@@ -235,21 +254,33 @@ class _SignInPageState extends State<SignInPage> {
                               if (password == '') {
                                 showPasswordError = true;
                               }
-                              if (email != '' && password != '') {
-                                //
-                                //TODO Backend
-                                //
-                                print('Success!');
-                                Navigator.push(
-                                  context,
-                                  Transition(
-                                    child: QuizPage(),
-                                    transitionEffect: TransitionEffect.bottomToTop,
-                                    curve: Curves.decelerate,
-                                  ).builder(),
-                                );
-                              }
                             });
+                            if (email != '' && password != '') {
+                              try {
+                                final user =
+                                    await _auth.signInWithEmailAndPassword(email: email, password: password);
+                                //
+                                UserData.email = email;
+                                UserData.password = password;
+                                //
+                                //TODO Backend - remember to save the User.vars in the DB, and download the other data
+                                //
+                                if (user != null) {
+                                  Navigator.push(
+                                    context,
+                                    Transition(
+                                      child: QuizPage(),
+                                      transitionEffect: TransitionEffect.bottomToTop,
+                                      curve: Curves.decelerate,
+                                    ).builder(),
+                                  );
+                                  print('Success!');
+                                }
+                              } catch (e) {
+                                print(e);
+                                //TODO handle error, maybe knowing what the type of errors are (e), then if else for every option
+                              }
+                            }
                           },
                         ), //button
                         SizedBox(height: 20),

@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:spark/components/TextFields.dart';
-import 'package:spark/components/Scaffolds.dart';
-import 'package:spark/components/ScrollBehavior.dart';
-import 'package:spark/components/Buttons.dart';
-import 'package:spark/components/Headers.dart';
-import 'package:spark/constants/Colors.dart';
-import 'package:flutter_holo_date_picker/flutter_holo_date_picker.dart';
-import 'package:spark/pages/quiz/QuizPage.dart';
-import 'package:transition/transition.dart';
-import 'package:spark/components/TextStyles.dart';
+//
 import 'SignInPage.dart';
+import 'package:spark/UserData.dart';
+import 'package:spark/constants/Colors.dart';
+import 'package:spark/components/Headers.dart';
+import 'package:spark/components/Buttons.dart';
+import 'package:spark/pages/quiz/QuizPage.dart';
+import 'package:spark/components/Scaffolds.dart';
+import 'package:spark/components/TextFields.dart';
+import 'package:spark/components/TextStyles.dart';
+import 'package:spark/components/ScrollBehavior.dart';
+//
+import 'package:transition/transition.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:string_validator/string_validator.dart';
-import 'package:spark/user.dart';
+import 'package:flutter_holo_date_picker/flutter_holo_date_picker.dart';
 import 'package:flutter_password_strength/flutter_password_strength.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -24,27 +27,50 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   //
-  IconData visibilityIcon;
-  bool passwordObscureText = true;
-  int counter = 0;
-  FocusNode nameFocus;
-  FocusNode emailFocus;
-  FocusNode passwordFocus;
-  FocusNode birthFocus;
-  int dateYear;
-  int dateMonth;
-  int dateDay;
-  bool showDate = false;
-  String passwordHolder;
-  double passwordStrengthHolder = 0;
+  //Booleans for Input Errors
   //
-  String dateText;
-  int birthdayHolder;
-
   bool showNameError = false;
   bool showEmailError = false;
   bool showPasswordError = false;
   bool showBirthDateError = false;
+  //
+  //Database
+  //
+  final _auth = FirebaseAuth.instance;
+  //
+  //Date vars
+  //
+  int dateDay;
+  int dateYear;
+  int dateMonth;
+  int birthdayHolder;
+  String dateText;
+  bool showDate = false;
+  //
+  //FocusNodes
+  //
+  FocusNode nameFocus;
+  FocusNode emailFocus;
+  FocusNode passwordFocus;
+  FocusNode birthFocus;
+  //
+  //Password vars
+  //
+  int counter = 0;
+  String passwordHolder;
+  IconData visibilityIcon;
+  bool passwordObscureText = true;
+  double passwordStrengthHolder = 0;
+  //
+  //User Data
+  //
+  int age = 0;
+  String name = '';
+  String email = '';
+  String password = '';
+  String birthDate = '';
+  //
+  //Functions
   //
   ///Sets the date into the vars
   void setDate({year, month, day}) {
@@ -63,6 +89,8 @@ class _SignUpPageState extends State<SignUpPage> {
     } else if ((DateTime.now().month - dateMonth) > 0) birthdayHolder = (DateTime.now().year - dateYear);
   }
 
+  //
+  //Build
   //
   @override
   void initState() {
@@ -131,13 +159,13 @@ class _SignUpPageState extends State<SignUpPage> {
                                 //Validation
                                 //
                                 if (isAlpha(trim(value))) {
-                                  User.name = trim(value);
+                                  name = trim(value);
                                   showNameError = false;
                                 } else {
-                                  User.name = '';
+                                  name = '';
                                 }
                               });
-                              print(User.name);
+                              print(name);
                             } // cleans the vars
                             ), //name
                         SizedBox(height: 20),
@@ -159,12 +187,12 @@ class _SignUpPageState extends State<SignUpPage> {
                               //Validation
                               //
                               if (isEmail(trim(value))) {
-                                User.email = trim(value);
+                                email = trim(value);
                                 showEmailError = false;
                               } else {
-                                User.email = '';
+                                email = '';
                               }
-                              print(User.email);
+                              print(email);
                             });
                           },
                         ), //email
@@ -216,12 +244,12 @@ class _SignUpPageState extends State<SignUpPage> {
                                   isAscii(trim(value)) &&
                                   !contains(trim(value), ' ') &&
                                   passwordStrengthHolder > 0.5) {
-                                User.password = trim(value);
+                                password = trim(value);
                                 showPasswordError = false;
                               } else {
-                                User.password = '';
+                                password = '';
                               }
-                              print(User.password);
+                              print(password);
                             });
                           },
                         ), //password
@@ -263,7 +291,7 @@ class _SignUpPageState extends State<SignUpPage> {
                               ),
                             ),
                           ),
-                        ),
+                        ), //password strength bar
                         SizedBox(height: 15),
                         AccountTextField(
                           context: context,
@@ -279,6 +307,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           onTapBirthTextField: () async {
                             await DatePicker.showSimpleDatePicker(
                               context,
+                              looping: true,
                               backgroundColor: kAppBackgroundColor,
                               textColor: Colors.white,
                               titleText: 'Select your Birth Date',
@@ -301,15 +330,15 @@ class _SignUpPageState extends State<SignUpPage> {
                                   //Validation
                                   //
                                   if (birthdayHolder >= 18) {
-                                    User.birthDate = dateText;
-                                    User.age = birthdayHolder;
+                                    birthDate = dateText;
+                                    age = birthdayHolder;
                                     showBirthDateError = false;
                                   } else {
-                                    User.birthDate = '';
-                                    User.age = 0;
+                                    birthDate = '';
+                                    age = 0;
                                   }
-                                  print(User.birthDate);
-                                  print(User.age);
+                                  print(birthDate);
+                                  print(age);
                                 }
                               });
                             });
@@ -376,38 +405,51 @@ class _SignUpPageState extends State<SignUpPage> {
                         SizedBox(height: 15),
                         AccountButton(
                           title: 'Sign Up',
-                          onTap: () {
+                          onTap: () async {
                             setState(() {
-                              if (User.name == '') {
+                              if (name == '') {
                                 showNameError = true;
                               }
-                              if (User.email == '') {
+                              if (email == '') {
                                 showEmailError = true;
                               }
-                              if (User.password == '') {
+                              if (password == '') {
                                 showPasswordError = true;
                               }
-                              if (User.age == 0) {
+                              if (age == 0) {
                                 showBirthDateError = true;
                               }
-                              if (User.name != '' &&
-                                  User.email != '' &&
-                                  User.password != '' &&
-                                  User.age >= 18) {
-                                //
-                                //TODO Backend
-                                //
-                                print('Success!');
-                                Navigator.push(
-                                  context,
-                                  Transition(
-                                    child: QuizPage(),
-                                    transitionEffect: TransitionEffect.scale,
-                                    curve: Curves.decelerate,
-                                  ).builder(),
-                                );
-                              }
                             });
+                            if (name != '' && email != '' && password != '' && age >= 18) {
+                              try {
+                                final newUser = await _auth.createUserWithEmailAndPassword(
+                                    email: email, password: password);
+                                //
+                                UserData.name = name;
+                                UserData.email = email;
+                                UserData.password = password;
+                                UserData.birthDate = birthDate;
+                                UserData.age = age;
+                                //
+                                //TODO Backend - remember to save the User.vars in the DB
+                                //
+                                if (newUser != null) {
+                                  Navigator.push(
+                                    context,
+                                    Transition(
+                                      child: QuizPage(),
+                                      transitionEffect: TransitionEffect.scale,
+                                      curve: Curves.decelerate,
+                                    ).builder(),
+                                  );
+                                  //
+                                  print('Success!');
+                                }
+                              } catch (e) {
+                                print(e);
+                                //TODO handle error, maybe knowing what the type of errors are (e), then if else for every option
+                              }
+                            }
                           },
                         ), //button
                         SizedBox(height: 20),

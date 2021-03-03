@@ -19,6 +19,9 @@ dependencies:
   string_validator: ^0.1.4 #different cases for validating strings
   flutter_animated_dialog: ^1.2.0 #TODO use it somewhere xD
   flutter_password_strength: ^0.1.5 #highlitgher of password strength
+  firebase_core: ^0.7.0
+  firebase_auth: ^0.20.1
+  cloud_firestore: ^0.16.0+1
 
 dev_dependencies:
   flutter_test:

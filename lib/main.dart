@@ -1,9 +1,14 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'pages/account/SignUpPage.dart';
 import 'pages/account/SignInPage.dart';
 import 'pages/quiz/QuizPage.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   //
@@ -12,7 +17,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       //
-      initialRoute: SignInPage.id,
+      initialRoute: SignUpPage.id,
       //
       routes: {
         SignUpPage.id: (context) => SignUpPage(),

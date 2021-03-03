@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "9880330803",
+    "project_id": "spark-datingapp",
+    "storage_bucket": "spark-datingapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:9880330803:android:892876a4bceda431b17946",
+        "android_client_info": {
+          "package_name": "com.datingapp.spark"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "9880330803-3h24qsmnfq8iam3ausi8vjc96q40aciv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCuQiREhzXPlA2FXytOnWia86ojirt9Mqk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "9880330803-3h24qsmnfq8iam3ausi8vjc96q40aciv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
