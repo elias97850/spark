@@ -22,7 +22,7 @@ class CustomScaffold extends StatelessWidget {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       ///This edits the overlay where the signal, time, and notifications show at the top
       value: SystemUiOverlayStyle(
-        statusBarColor: statusBarColor.withOpacity(0.10),
+        statusBarColor: statusBarColor.withOpacity(0),
         statusBarIconBrightness: statusBarIconBrightness,
       ),
       child: Scaffold(
