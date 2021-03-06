@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spark/components/AlertDialog.dart';
 //
 import 'SignUpPage.dart';
 import 'package:spark/UserData.dart';
@@ -25,6 +26,8 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
+  Color barrierColor = Colors.grey;
+  double opacity = .1;
   //
   //Booleans for Input Errors
   //
@@ -296,8 +299,70 @@ class _SignInPageState extends State<SignInPage> {
                                   setState(() {
                                     showSpinner = false;
                                   });
-                                  print(e);
-                                  //TODO handle error, maybe knowing what the type of errors are (e), then if else for every option
+                                  switch (e.code) {
+                                    case "invalid-email":
+                                      //"Your email address appears to be WEIRD."
+                                      CustomAlertDialog(
+                                        context: context,
+                                        //
+                                        title: 'Mmm wait...',
+                                        titleFontSize: 20,
+                                        content: 'Your email appears to be WEIRD',
+                                        contentFontSize: 15,
+                                        //
+                                        barrierColor: barrierColor,
+                                        backgroundColor: kAppBackgroundColorLite,
+                                        opacity: opacity,
+                                      );
+                                      break;
+                                    case "wrong-password":
+                                      //"Your password is incorrect."eliasmarrero98@gmail.com
+                                      CustomAlertDialog(
+                                        context: context,
+                                        //
+                                        title: 'Mmm wait...',
+                                        titleFontSize: 20,
+                                        content: 'Wrong password! Email\'s ok tho 👌',
+                                        contentFontSize: 15,
+                                        //
+                                        barrierColor: barrierColor,
+                                        backgroundColor: kAppBackgroundColorLite,
+                                        opacity: opacity,
+                                      );
+                                      break;
+                                    case "user-not-found":
+                                      //"User with this email already exist."
+                                      CustomAlertDialog(
+                                        context: context,
+                                        //
+                                        title: 'Mmm wait...',
+                                        titleFontSize: 20,
+                                        content: 'The account doesn\'t exist 🙃\n'
+                                            'Maybe check your email!',
+                                        contentFontSize: 15,
+                                        //
+                                        opacity: opacity,
+                                        barrierColor: barrierColor,
+                                        backgroundColor: kAppBackgroundColorLite,
+                                      );
+                                      break;
+                                    default:
+                                      //"Sorry! An error happened on our part."
+                                      CustomAlertDialog(
+                                        context: context,
+                                        //
+                                        title: 'Mmm wait...',
+                                        titleFontSize: 20,
+                                        content: 'Sorry! An error on our part 😬',
+                                        contentFontSize: 15,
+                                        buttonText: 'Try Again',
+                                        //
+                                        opacity: opacity,
+                                        barrierColor: barrierColor,
+                                        backgroundColor: kAppBackgroundColorLite,
+                                      );
+                                      break;
+                                  }
                                 }
                                 setState(() {
                                   showSpinner = false;

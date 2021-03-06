@@ -17,7 +17,6 @@ dependencies:
   transition: ^1.0.2 #animation in transitions
   animated_text_kit: ^3.1.2 #animate text
   string_validator: ^0.1.4 #different cases for validating strings
-  flutter_animated_dialog: ^1.2.0 #TODO use it somewhere xD
   flutter_password_strength: ^0.1.5 #highlitgher of password strength
   firebase_core: ^0.7.0
   firebase_auth: ^0.20.1
