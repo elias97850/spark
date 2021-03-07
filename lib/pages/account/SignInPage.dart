@@ -26,8 +26,6 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
-  Color barrierColor = Colors.grey;
-  double opacity = .1;
   //
   //Booleans for Input Errors
   //
@@ -57,7 +55,6 @@ class _SignInPageState extends State<SignInPage> {
   //
   String email = '';
   String password = '';
-
   //
   //Build
   //
@@ -73,7 +70,7 @@ class _SignInPageState extends State<SignInPage> {
   Widget build(BuildContext context) {
     return ModalProgressHUD(
       inAsyncCall: showSpinner,
-      opacity: .1,
+      opacity: 0.1,
       color: Colors.grey,
       progressIndicator: CircularProgressIndicator(
         valueColor: new AlwaysStoppedAnimation<Color>(kSparkHeaderRed),
@@ -299,6 +296,7 @@ class _SignInPageState extends State<SignInPage> {
                                   setState(() {
                                     showSpinner = false;
                                   });
+                                  //too-many-requests
                                   switch (e.code) {
                                     case "invalid-email":
                                       //"Your email address appears to be WEIRD."
@@ -306,13 +304,7 @@ class _SignInPageState extends State<SignInPage> {
                                         context: context,
                                         //
                                         title: 'Mmm wait...',
-                                        titleFontSize: 20,
                                         content: 'Your email appears to be WEIRD',
-                                        contentFontSize: 15,
-                                        //
-                                        barrierColor: barrierColor,
-                                        backgroundColor: kAppBackgroundColorLite,
-                                        opacity: opacity,
                                       );
                                       break;
                                     case "wrong-password":
@@ -321,13 +313,7 @@ class _SignInPageState extends State<SignInPage> {
                                         context: context,
                                         //
                                         title: 'Mmm wait...',
-                                        titleFontSize: 20,
                                         content: 'Wrong password! Email\'s ok tho 👌',
-                                        contentFontSize: 15,
-                                        //
-                                        barrierColor: barrierColor,
-                                        backgroundColor: kAppBackgroundColorLite,
-                                        opacity: opacity,
                                       );
                                       break;
                                     case "user-not-found":
@@ -336,14 +322,17 @@ class _SignInPageState extends State<SignInPage> {
                                         context: context,
                                         //
                                         title: 'Mmm wait...',
-                                        titleFontSize: 20,
                                         content: 'The account doesn\'t exist 🙃\n'
                                             'Maybe check your email!',
-                                        contentFontSize: 15,
+                                      );
+                                      break;
+                                    case "too-many-requests":
+                                      CustomAlertDialog(
+                                        context: context,
                                         //
-                                        opacity: opacity,
-                                        barrierColor: barrierColor,
-                                        backgroundColor: kAppBackgroundColorLite,
+                                        title: 'Mmm wait...',
+                                        content: 'You\'ve failed too much'
+                                            '\nTry the "Forgot your password?"',
                                       );
                                       break;
                                     default:
@@ -352,14 +341,8 @@ class _SignInPageState extends State<SignInPage> {
                                         context: context,
                                         //
                                         title: 'Mmm wait...',
-                                        titleFontSize: 20,
                                         content: 'Sorry! An error on our part 😬',
-                                        contentFontSize: 15,
                                         buttonText: 'Try Again',
-                                        //
-                                        opacity: opacity,
-                                        barrierColor: barrierColor,
-                                        backgroundColor: kAppBackgroundColorLite,
                                       );
                                       break;
                                   }

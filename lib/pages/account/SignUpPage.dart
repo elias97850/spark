@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 //
 import 'SignInPage.dart';
 import 'package:spark/UserData.dart';
@@ -30,8 +30,6 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  Color barrierColor = Colors.grey;
-  double opacity = .1;
   //
   //Booleans for Input Errors
   //
@@ -117,8 +115,8 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     return ModalProgressHUD(
       inAsyncCall: showSpinner,
-      opacity: opacity,
-      color: barrierColor,
+      opacity: 0.1,
+      color: Colors.grey,
       progressIndicator: CircularProgressIndicator(
         valueColor: new AlwaysStoppedAnimation<Color>(kSparkHeaderRed),
       ),
@@ -143,7 +141,6 @@ class _SignUpPageState extends State<SignUpPage> {
                   children: [
                     Container(
                       alignment: Alignment.centerLeft,
-                      //width: double.infinity,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -373,30 +370,6 @@ class _SignUpPageState extends State<SignUpPage> {
                             children: [
                               Header2(title: 'Already have an account?'),
                               SizedBox(width: 5),
-                              // OpenContainer(
-                              //   transitionType: ContainerTransitionType.fade,
-                              //   closedElevation: 0,
-                              //   openElevation: 0,
-                              //   closedColor: kAppBackgroundColor,
-                              //   openColor: kAppBackgroundColor,
-                              //   transitionDuration: Duration(milliseconds: 800),
-                              //   closedBuilder: (context, openWidget) {
-                              //     //Normal Widget
-                              //     return Text(
-                              //       'Sign In!',
-                              //       style: TextStyle(
-                              //         fontFamily: 'TTNorms',
-                              //         color: kSparkHeaderRed,
-                              //         fontSize: 15,
-                              //         fontWeight: FontWeight.bold,
-                              //       ),
-                              //     );
-                              //   },
-                              //   openBuilder: (context, closedWidget) {
-                              //     //New Widget
-                              //     return SignInPage();
-                              //   },
-                              // ),
                               GestureDetector(
                                 onTap: () {
                                   Navigator.push(
@@ -483,14 +456,8 @@ class _SignUpPageState extends State<SignUpPage> {
                                             context: context,
                                             //
                                             title: 'Mmm wait...',
-                                            titleFontSize: 20,
                                             content: 'Sorry! An error on our part 😬',
-                                            contentFontSize: 15,
                                             buttonText: 'Try Again',
-                                            //
-                                            opacity: opacity,
-                                            barrierColor: barrierColor,
-                                            backgroundColor: kAppBackgroundColorLite,
                                           );
                                         }
                                       }
@@ -523,13 +490,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                         context: context,
                                         //
                                         title: 'Mmm wait...',
-                                        titleFontSize: 20,
                                         content: 'Your email appears to be WEIRD',
-                                        contentFontSize: 15,
-                                        //
-                                        barrierColor: barrierColor,
-                                        backgroundColor: kAppBackgroundColorLite,
-                                        opacity: opacity,
                                       );
                                       break;
                                     case "weak-password":
@@ -538,13 +499,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                         context: context,
                                         //
                                         title: 'Mmm wait...',
-                                        titleFontSize: 20,
                                         content: 'Your password is WEAK (not worthy)',
-                                        contentFontSize: 15,
-                                        //
-                                        barrierColor: barrierColor,
-                                        backgroundColor: kAppBackgroundColorLite,
-                                        opacity: opacity,
                                       );
                                       break;
                                     case "email-already-in-use":
@@ -553,13 +508,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                         context: context,
                                         //
                                         title: 'Mmm wait...',
-                                        titleFontSize: 20,
                                         content: 'Account with this email already exist',
-                                        contentFontSize: 15,
-                                        //
-                                        opacity: opacity,
-                                        barrierColor: barrierColor,
-                                        backgroundColor: kAppBackgroundColorLite,
                                       );
                                       break;
                                     default:
@@ -568,14 +517,8 @@ class _SignUpPageState extends State<SignUpPage> {
                                         context: context,
                                         //
                                         title: 'Mmm wait...',
-                                        titleFontSize: 20,
                                         content: 'Sorry! An error on our part 😬',
-                                        contentFontSize: 15,
                                         buttonText: 'Try Again',
-                                        //
-                                        opacity: opacity,
-                                        barrierColor: barrierColor,
-                                        backgroundColor: kAppBackgroundColorLite,
                                       );
                                       break;
                                   }

@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 //
 import 'package:spark/UserData.dart';
+import 'package:spark/components/AlertDialog.dart';
 import 'package:spark/constants/Colors.dart';
 import 'package:spark/components/Scaffolds.dart';
 //
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:spark/pages/account/SignInPage.dart';
 
 class InitialLoadingPage extends StatefulWidget {
+  //
+  static String id = 'loadingPage';
+  //
   @override
   _InitialLoadingPageState createState() => _InitialLoadingPageState();
 }
@@ -31,6 +36,13 @@ class _InitialLoadingPageState extends State<InitialLoadingPage> {
       }
     } catch (e) {
       //TODO handle error by understanding the (e)
+      CustomAlertDialog(
+        context: context,
+        title: 'Mmm wait...',
+        content: 'Seems like you aren\'t -Signed In-'
+            '\nSigning out...',
+      );
+      Navigator.pushReplacementNamed(context, SignInPage.id);
     }
   }
 
@@ -84,9 +96,9 @@ class _InitialLoadingPageState extends State<InitialLoadingPage> {
         // User.chatsIDList = doc.data['chatList'];
         // print(User.swipedMatchingUidsMap);
         print(
-            ' name ${UserData.name} \n uid ${UserData.uid} \n email ${UserData.email} \n password ${UserData.password} \n age ${UserData.age} '
-            '\n birthdate ${UserData.birthDate} '
-            '\n quizCompleted ${UserData.quizCompleted} \n tagsCompleted ${UserData.tagsCompleted} \n setUpCompleted ${UserData.setUpCompleted}');
+            ' name ${UserData.name} \n uid ${UserData.uid} \n email ${UserData.email} \n password ${UserData.password}'
+            '\n age ${UserData.age} \n birthdate ${UserData.birthDate} \n quizCompleted ${UserData.quizCompleted}'
+            '\n tagsCompleted ${UserData.tagsCompleted} \n setUpCompleted ${UserData.setUpCompleted}');
       }
     } catch (e) {
       //TODO handle error by understanding the (e)
