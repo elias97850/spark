@@ -96,7 +96,6 @@ class _SignInPageState extends State<SignInPage> {
                   children: [
                     Container(
                       alignment: Alignment.centerLeft,
-                      //width: double.infinity,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -130,6 +129,7 @@ class _SignInPageState extends State<SignInPage> {
                                 //
                                 //Validation
                                 //
+                                //checks that the text has an email format
                                 if (isEmail(trim(value))) {
                                   email = trim(value);
                                   showEmailError = false;
@@ -155,6 +155,7 @@ class _SignInPageState extends State<SignInPage> {
                             isPasswordTextField: true,
                             onPressedPasswordIcon: () {
                               setState(() {
+                                //this handles the button for the visibility of the password
                                 if (visibilityIcon == Icons.visibility) {
                                   //text can be read
                                   visibilityIcon = Icons.visibility_off;
@@ -183,6 +184,9 @@ class _SignInPageState extends State<SignInPage> {
                                 //
                                 //Validation
                                 //
+                                //checks if the text is longer than 7 chars,
+                                //that it only has chars that are in the ASCII table,
+                                //and that it doesn't contain spaces
                                 if (trim(value).length > 7 &&
                                     isAscii(trim(value)) &&
                                     !contains(trim(value), ' ')) {
@@ -255,12 +259,13 @@ class _SignInPageState extends State<SignInPage> {
                                 ),
                               ), //Signup redirection
                             ],
-                          ), //h2 of footer
+                          ), //SignUp redirection header and button
                           SizedBox(height: 15),
                           AccountButton(
                             title: 'Sign In',
                             onTap: () async {
                               setState(() {
+                                //checks if there were errors
                                 if (email == '') {
                                   showEmailError = true;
                                 }
@@ -268,6 +273,8 @@ class _SignInPageState extends State<SignInPage> {
                                   showPasswordError = true;
                                 }
                               });
+                              //if no errors happened then we sign in the user,
+                              //also handles errors for when signing in the user
                               if (email != '' && password != '') {
                                 FocusScope.of(context).unfocus();
                                 showSpinner = true;
@@ -286,7 +293,7 @@ class _SignInPageState extends State<SignInPage> {
                                       context,
                                       Transition(
                                         child: InitialLoadingPage(),
-                                        transitionEffect: TransitionEffect.bottomToTop,
+                                        transitionEffect: TransitionEffect.rightToLeft,
                                         curve: Curves.decelerate,
                                       ).builder(),
                                     );
@@ -308,7 +315,7 @@ class _SignInPageState extends State<SignInPage> {
                                       );
                                       break;
                                     case "wrong-password":
-                                      //"Your password is incorrect."eliasmarrero98@gmail.com
+                                      //"Your password is incorrect."
                                       CustomAlertDialog(
                                         context: context,
                                         //

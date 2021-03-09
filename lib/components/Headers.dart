@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+//
 import 'package:spark/constants/Colors.dart';
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:spark/components/TextStyles.dart';
+//
+import 'package:animated_text_kit/animated_text_kit.dart';
 
+///Small and red Spark label
 class SparkHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -32,6 +35,7 @@ class SparkHeader extends StatelessWidget {
   }
 }
 
+///Big white header
 class Header1 extends StatelessWidget {
   //
   Header1({this.title});
@@ -51,6 +55,7 @@ class Header1 extends StatelessWidget {
   }
 }
 
+///Small gray header
 class Header2 extends StatelessWidget {
   //
   Header2({this.title});

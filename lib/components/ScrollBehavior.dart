@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+///Used to replace the default ScrollBehavior that has colored bounds
 class MyBehavior extends ScrollBehavior {
   @override
   Widget buildViewportChrome(BuildContext context, Widget child, AxisDirection axisDirection) {

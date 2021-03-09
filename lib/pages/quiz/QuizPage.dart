@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 //
 import 'package:spark/constants/Colors.dart';
+import 'package:spark/DatabaseFunctions.dart';
 import 'package:spark/components/Scaffolds.dart';
 //
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,18 +20,6 @@ class _QuizPageState extends State<QuizPage> {
   //
   final _auth = FirebaseAuth.instance;
   User loggedInUser;
-
-  void getCurrentUser() {
-    try {
-      final user = _auth.currentUser;
-      if (user != null) {
-        loggedInUser = user;
-      }
-    } catch (e) {
-      //TODO handle error by understanding the (e)
-    }
-  }
-
   //
   //Build
   //
@@ -38,7 +27,7 @@ class _QuizPageState extends State<QuizPage> {
   void initState() {
     super.initState();
     //
-    getCurrentUser();
+    getCurrentUser(context: context);
   }
 
   //

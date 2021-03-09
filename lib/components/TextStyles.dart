@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+///A customizable TextStyle that has the TTNorms font already
 TextStyle CustomTextStyle({Color color, double fontSize, FontWeight fontWeight}) {
   return TextStyle(
     letterSpacing: .5,

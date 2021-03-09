@@ -172,6 +172,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                   //
                                   //Validation
                                   //
+                                  // checks if the text is Alphanumeric (letters and numbers)
                                   if (isAlpha(trim(value))) {
                                     name = trim(value);
                                     showNameError = false;
@@ -200,6 +201,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                 //
                                 //Validation
                                 //
+                                //checks that the text has an email format
                                 if (isEmail(trim(value))) {
                                   email = trim(value);
                                   showEmailError = false;
@@ -225,6 +227,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             isPasswordTextField: true,
                             onPressedPasswordIcon: () {
                               setState(() {
+                                //this handles the button for the visibility of the password
                                 if (visibilityIcon == Icons.visibility) {
                                   //text can be read
                                   visibilityIcon = Icons.visibility_off;
@@ -254,6 +257,9 @@ class _SignUpPageState extends State<SignUpPage> {
                                 //
                                 //Validation
                                 //
+                                //checks if the text is longer than 7 chars,
+                                //that it only has chars that are in the ASCII table,
+                                //and that it doesn't contain spaces
                                 if (trim(value).length > 7 &&
                                     isAscii(trim(value)) &&
                                     !contains(trim(value), ' ') &&
@@ -343,6 +349,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                     //
                                     //Validation
                                     //
+                                    //checks if the age of the user is equal or greater than 18
                                     if (birthdayHolder >= 18) {
                                       birthDate = dateText;
                                       age = birthdayHolder;
@@ -391,12 +398,13 @@ class _SignUpPageState extends State<SignUpPage> {
                                 ),
                               ), //SignIn redirection
                             ],
-                          ), //h2 of footer
+                          ), //SignIn redirection header and button
                           SizedBox(height: 15),
                           AccountButton(
                             title: 'Sign Up',
                             onTap: () async {
                               setState(() {
+                                //checks if there were errors
                                 if (name == '') {
                                   showNameError = true;
                                 }
@@ -410,6 +418,9 @@ class _SignUpPageState extends State<SignUpPage> {
                                   showBirthDateError = true;
                                 }
                               });
+                              //if no errors happened then we create the account,
+                              //and upload the user data to the db and save it in the UserData.vars
+                              //also handles errors for when creating an account, and for when uploading user data to the db
                               if (name != '' && email != '' && password != '' && age >= 18) {
                                 FocusScope.of(context).unfocus();
                                 showSpinner = true;

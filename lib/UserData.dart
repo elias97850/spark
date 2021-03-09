@@ -1,5 +1,6 @@
 import 'dart:core';
 
+///Basically a class full of static vars for all the user data available
 class UserData {
   //
   // Account

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:spark/constants/Colors.dart';
 import 'package:spark/components/TextStyles.dart';
 
+///TextField (includes title) for the Account Pages (SignUp & SignIn)
 class AccountTextField extends StatefulWidget {
   //
   AccountTextField({
@@ -50,6 +51,7 @@ class AccountTextField extends StatefulWidget {
 class _AccountTextFieldState extends State<AccountTextField> {
   //
   InputDecoration inputDecorationChooser() {
+    //if it's the password's textfield, show and icon for the visibility of the input
     if (widget.isPasswordTextField == true) {
       return InputDecoration(
         suffixIcon: IconButton(
@@ -105,7 +107,6 @@ class _AccountTextFieldState extends State<AccountTextField> {
               ),
             ), //Title
             SizedBox(width: 5),
-
             AnimatedOpacity(
               duration: Duration(milliseconds: 400),
               opacity: widget.showTextFormatError == true ? 1 : 0,
@@ -131,7 +132,7 @@ class _AccountTextFieldState extends State<AccountTextField> {
                   ],
                 ),
               ),
-            )
+            ) //Animated Error Message
           ],
         ), //Title & Error Message
         SizedBox(height: 15),
@@ -145,6 +146,7 @@ class _AccountTextFieldState extends State<AccountTextField> {
           ),
           child: TextFormField(
             focusNode: widget.currentFocus,
+            //changes the focus from current textfield to the next textfield
             onFieldSubmitted: (term) {
               widget.currentFocus.unfocus();
               FocusScope.of(widget.context).requestFocus(widget.nextFocus);
